@@ -1,0 +1,98 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": []
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "code",
+      "execution_count": 1,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "73Z2bD2TvNAw",
+        "outputId": "3ae43a8c-51f7-4102-e9f4-10f68c6f10b5"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Visiting: A\n",
+            "Visiting: C\n",
+            "Visiting: F\n",
+            "Goal reached!\n",
+            "Path followed: ['A', 'C', 'F']\n"
+          ]
+        }
+      ],
+      "source": [
+        "import heapq\n",
+        "\n",
+        "# Graph representation (Adjacency List)\n",
+        "graph = {\n",
+        "    'A': ['B', 'C'],\n",
+        "    'B': ['D', 'E'],\n",
+        "    'C': ['F'],\n",
+        "    'D': [],\n",
+        "    'E': ['F'],\n",
+        "    'F': []\n",
+        "}\n",
+        "\n",
+        "# Heuristic values (estimated cost to goal F)\n",
+        "heuristic = {\n",
+        "    'A': 5,\n",
+        "    'B': 4,\n",
+        "    'C': 2,\n",
+        "    'D': 3,\n",
+        "    'E': 1,\n",
+        "    'F': 0\n",
+        "}\n",
+        "\n",
+        "def best_first_search(start, goal):\n",
+        "    visited = set()\n",
+        "    priority_queue = []\n",
+        "\n",
+        "    # Push start node with its heuristic value\n",
+        "    heapq.heappush(priority_queue, (heuristic[start], start))\n",
+        "\n",
+        "    path = []\n",
+        "\n",
+        "    while priority_queue:\n",
+        "        h, node = heapq.heappop(priority_queue)\n",
+        "\n",
+        "        if node not in visited:\n",
+        "            print(\"Visiting:\", node)\n",
+        "            visited.add(node)\n",
+        "            path.append(node)\n",
+        "\n",
+        "            if node == goal:\n",
+        "                print(\"Goal reached!\")\n",
+        "                return path\n",
+        "\n",
+        "            # Add neighbors to priority queue\n",
+        "            for neighbor in graph[node]:\n",
+        "                if neighbor not in visited:\n",
+        "                    heapq.heappush(priority_queue, (heuristic[neighbor], neighbor))\n",
+        "\n",
+        "    return path\n",
+        "\n",
+        "\n",
+        "# Run the algorithm\n",
+        "result = best_first_search('A', 'F')\n",
+        "print(\"Path followed:\", result)"
+      ]
+    }
+  ]
+}
